@@ -8,41 +8,44 @@ const { match } = require('assert');
 // );
 
 exports.getAllTours = async (req, res) => {
- 
   try {
-    //Buuild the query 
+    //Buuild the query
     //1A) Filtering
     const queryObj = { ...req.query };
     const excludedField = ['page', 'sort', 'limit', 'fields'];
     excludedField.forEach((el) => delete queryObj[el]);
-    console.log(req.query)
+    console.log(req.query);
     // console.log(queryObj)
 
-// 1B) Advanced Filtering
- 
-let queryStr = JSON.stringify(queryObj);
-queryStr = queryStr.replace(/\b(lte|lt|gte|gt)\b/g, match => `$${match}`);
+    // 1B) Advanced Filtering
 
-console.log(JSON.parse(queryStr));
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(lte|lt|gte|gt)\b/g, (match) => `$${match}`);
 
-let query = Tour.find(JSON.parse(queryStr));
+    console.log(JSON.parse(queryStr));
 
-//2)Sorting
-if(req.query.sort){
-  let sortBy = req.query.sort.split(',').join(' ');
-  // console.log(sortBy);
-  query = query.sort(sortBy);
-}
+    let query = Tour.find(JSON.parse(queryStr));
 
-// 3) limiting Fields
+    //2)Sorting
+    if (req.query.sort) {
+      let sortBy = req.query.sort.split(',').join(' ');
+      // console.log(sortBy);
+      query = query.sort(sortBy);
+    } else {
+      //default sorting
+      query = query.sort('-createdAt');
+    }
 
+    // 3) limiting Fields
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');;
+    }
 
-
-
-
-//Execute the query
-const tours = await query;
-
+    //Execute the query
+    const tours = await query;
 
     ///// (ANOTHER WAY TO QUERY OBJECTS IN MOONGOOSE)
     // const query = Tour.find()
@@ -52,7 +55,7 @@ const tours = await query;
     //   .equals('easy');
     // console.log(req.requestTime);
 
-//Send the response 
+    //Send the response
     res.status(200).json({
       status: 'success',
       // requestedAt: req.requestTime,

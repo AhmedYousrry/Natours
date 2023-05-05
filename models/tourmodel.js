@@ -1,77 +1,75 @@
 const mongoose = require('mongoose');
 
 const tourSchema = new mongoose.Schema({
-    name: {
-      type: String,
-      required: [true, 'A tour must have a name !'],
-      unique: true,
-      trim: true,
-    },
-    
-    duration:{
-      type:Number,
-      required:[true , 'A tour must have a duration']
-    },
-    
-    maxGroupSize :{
-      type:Number,
-      required:[true ,  ' A tour must have a size'],
-    },
+  name: {
+    type: String,
+    required: [true, 'A tour must have a name !'],
+    unique: true,
+    trim: true,
+  },
 
-    difficulty:{
-      type:String,
-      required:[true , 'A tour must have a difficulty'],
-    },
+  duration: {
+    type: Number,
+    required: [true, 'A tour must have a duration'],
+  },
 
-    ratingsAverage:{
-      type: Number,
-      default:4.5
-    },
-    
-    ratingsQuantity: {
-      type: Number,
-      default: 0,
-    },
-  
-    price: {
-      type: Number,
-      required: [true, 'A tour must have a price !'],
-    },
+  maxGroupSize: {
+    type: Number,
+    required: [true, ' A tour must have a size'],
+  },
 
-    priceDiscount: Number,
+  difficulty: {
+    type: String,
+    required: [true, 'A tour must have a difficulty'],
+  },
 
-    summary:{
-      type:String,
-      trim:true,
-      required:[true, 'A tour must have a summary']
-    },
-    description:{
-      type: String,
-      trim:true
-    },
+  ratingsAverage: {
+    type: Number,
+    default: 4.5,
+  },
 
-    imageCover:{
-      type:String,
-      required:[true, 'A tour must have a cover image'],
-    },
+  ratingsQuantity: {
+    type: Number,
+    default: 0,
+  },
 
-    images:[String],
-//this field gets added automatically at the time the user gets a new tour
-    createdAt:{
-      type:Date,
-      default:Date.now(),
-    },
+  price: {
+    type: Number,
+    required: [true, 'A tour must have a price !'],
+  },
 
-    startDates:[Date],
+  priceDiscount: Number,
 
-  });
+  summary: {
+    type: String,
+    trim: true,
+    required: [true, 'A tour must have a summary'],
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
 
-  const Tour = mongoose.model('Tour', tourSchema);
+  imageCover: {
+    type: String,
+    required: [true, 'A tour must have a cover image'],
+  },
 
-  // const newTour = new Tour({})
+  images: [String],
+  //this field gets added automatically at the time the user gets a new tour
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+    select: false,
+  },
 
-  //newTour.save().then(doc =>{console.log(doc)}).catch(err=>{console.log(err)});
+  startDates: [Date],
+});
 
+const Tour = mongoose.model('Tour', tourSchema);
 
+// const newTour = new Tour({})
 
-  module.exports = Tour;
+//newTour.save().then(doc =>{console.log(doc)}).catch(err=>{console.log(err)});
+
+module.exports = Tour;
